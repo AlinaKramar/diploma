@@ -351,7 +351,7 @@ def process_pedigree(file_name, order=None, stat=True):
 
 
 # NAME = 'c:\\python27\\Lib\\chr1000.gen'
-NAME = 'out.gen'
+NAME = 'out2.gen'
 if len(sys.argv) > 1:
     NAME = sys.argv[1]
 

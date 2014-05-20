@@ -1,0 +1,177 @@
+\documentclass{beamer}
+\usepackage{fontspec}
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{caption}
+\usepackage{xltxtra}
+\usepackage{xecyr}
+\usepackage{hyperref}
+\setmainfont[Mapping=tex-text]{DejaVu Serif}
+\setsansfont[Mapping=tex-text]{DejaVu Sans}
+\setmonofont[Mapping=tex-text]{DejaVu Sans Mono}
+\usepackage{polyglossia}
+\setdefaultlanguage{russian}
+\usepackage{graphicx}
+\usepackage{listings}
+
+\mode<presentation> {
+\usetheme{Singapore}
+\usecolortheme{dove}
+
+\setbeamertemplate{footline}[page number]
+%\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption}{\insertcaption}
+}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\title{Построение генетических карт по неполным и
+зашумленным данным}
+\author{Алина Крамар\\
+  { \footnotesize \textcolor{gray}{группа 545\\ руководитель Сысоев
+      С.С\\ рецензент Добрынин П.}}}
+\institute{Санкт-Петербургский государственный университет}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Необходимые определения}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Генетические карты}
+  \begin{itemize}
+    \item При получении генетического материала невозможно дать ответ
+      о расположении маркеров на хромосоме
+    \item Кроссинговер вносит возмущение в этот порядок
+    \item Порядок маркеров и формирование гамет происходит во время мейоза
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Существующие решения}
+  \begin{itemize}
+      \item CRIMAP
+
+        (Экспоненциальная сложность от количества особей в родословной)
+      \item LM\_MAP
+
+        (Экспоненциальная сложность от количества маркеров)
+      \item Прототип алгоритма Сергея Сысоева
+
+        (Степенная сложность от количества особей и маркеров)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Постановка задачи}
+  Сравнить существующие алгоритмы генетического картирования и
+  улучшить алгоритм Сергея Сысоева
+
+  Задачи:
+  \begin{itemize}
+  \item Сравнение алгоритмов генетического картирования
+    \begin{itemize}
+      \item реализовать алгоритм генерации тестовых данных
+      \item сравнить существующие алгоритмы на реализованной базе
+    \end{itemize}
+  \item Усовершенствование алгоритма Сысоева
+    \begin{itemize}
+      \item выявить недостатки алгоритма путём
+      \item реализовать новую версию алгоритма
+      \item выложить в открытый доступ новую версию
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Генерация тестовых данных}
+  \begin{itemize}
+    \item Моделирование мейоза и скрещивания
+    \item Генерация родословных по заданным параметрам
+    \item Симуляция мутаций
+    \item Генерация несоответствующих модели данных
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Пример родословной}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Результаты сравнения алгоритмов}
+ % +----------------+---------------+---------------+---------------+
+ % |                |CRIMAP         |LM\_MAP        |genmap.py      |
+ % |Особи/Маркеры   |               |               |               |
+ % +----------------+---------------+---------------+---------------+
+ % |192/35          |120 секунд     |111 секунд     |17 секунд      |
+ % |                |               |               |               |
+ % +----------------+---------------+---------------+---------------+
+ % |2011/146        |1 день         |1 день         |11 минут       |
+ % |                |               |               |               |
+ % +----------------+---------------+---------------+---------------+
+ % |100000/100      |10+ дней       |9+ дней        |37 минут       |
+ % |                |               |               |               |
+ % +----------------+---------------+---------------+---------------+
+
+
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    & CRIMAP & LM$\backslash$\_MAP & genmap.py \\
+    Особи/Маркеры & & & \\
+    \hline
+    192/35 & 120 секунд & 111 секунд & 17 секунд \\
+    & & & \\
+    \hline
+    2011/146 & 1 день & 1 день & 11 минут \\
+    & & & \\
+    \hline
+    100000/100 & 10+ дней & 9+ дней & 37 минут \\
+    & & & \\
+    \hline
+  \end{tabular}
+
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Результаты тестирования алгоритма С.Сысоева}
+  \begin{itemize}
+    \item Неустойчивость к вариациям входных данных
+    \item Неоптимальная реализация
+    \item Неправильный результат в случае кратного кроссинговера
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Учёт кратности кроссинговера}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Результаты}
+  \begin{itemize}
+  \item Произведено сравнение алгоритмов
+    \begin{itemize}
+      \item реализован алгоритм генерации тестовых данных
+      \item произведено сравнение алгоритмов с помощью реализованной базы
+    \end{itemize}
+  \item Улучшения алгоритма С.Сысоева
+    \begin{itemize}
+      \item произведено тестирование алгоритма на синтетических данных
+      \item учёт кратных рекомбинаций
+      \item скрипт выложен в открытый доступ (URL)
+    \end{itemize}
+  \item Выступление на конференции СПИСОК-2014
+  \end{itemize}
+\end{frame}
+
+\end{document}

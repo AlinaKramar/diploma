@@ -26,7 +26,7 @@ def generate(n_parents, n_children, cis_fraction=.5, n_allels=100):
 
 def generate_parents(n, n_allels):
     def random_parent(id):
-        allels = [(random.choice([1, 2]), random.choice([1, 2])) for _ in range(n_allels)] 
+        allels = [(random.choice([1, 2]), random.choice([1, 2])) for _ in range(n_allels)]
         sex = random.choice([MALE, FEMALE])
         return Organism(id, sex, allels)
 
@@ -53,13 +53,13 @@ def cross(parents, n_children, start_id=None):
                 mi = random.choice([0, 1])
                 fi = random.choice([0, 1])
             allels.append((m_a[mi], f_a[fi]))
-                    
+
         return Organism(id, sex, allels, m, f)
 
     return [cross_pair(id) for id in range(start_id, start_id + n_children)]
 
-def to_file(orgamisms, destination="out.gen"):
-    
+def to_file(orgamisms, destination="out2.gen"):
+
     def get_header():
         n_allels = len(orgamisms[0].allels)
         return "1\n{n_allels}\n{allel_names}\n\n1\n{n_orgnisms}\n".format(
@@ -81,8 +81,8 @@ def to_file(orgamisms, destination="out.gen"):
                 father=o.father.id if o.father else 0,
                 sex={MALE: 0, FEMALE: 1}[o.sex],
                 allels=format_allels(o.allels)
-            )        
+            )
             f.write(s)
 
 if __name__=="__main__":
-    to_file(generate(n_parents=42, n_children=150, n_allels=35))
+    to_file(generate(n_parents=3, n_children=7, n_allels=35))
