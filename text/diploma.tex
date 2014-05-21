@@ -631,7 +631,7 @@ $f(d):\mathbb{R} \to \mathbb{N}$, возвращающую количество 
   \caption{Генерация родословной}
   \label{algo:pedogen}
   \begin{algorithmic}[1]
-    \Procedure{GenPedigree}{}
+    \Procedure{GenPedigree}{n\_gen, crossover\_strategy}
     \State $\mathit{population} \gets []$
     \State $\mathit{founders} \gets$ список прародителей
     \State $\mathit{population} \gets \mathit{population} + \mathit{founders}$
@@ -649,14 +649,18 @@ $f(d):\mathbb{R} \to \mathbb{N}$, возвращающую количество 
     \State
 
     \Function{CrossBreed}{mother, father}
-    \State $\mathit{mother} \mathit{gamet} \gets \mathit{Crossover}(\mathit{mother} \mathit{chromosomes})$
-    \State $\mathit{father} \mathit{gamet} \gets \mathit{Crossover}(\mathit{father} \mathit{chromosomes})$
+    \State $\mathit{mother} \mathit{gamet} \gets
+    \mathit{Crossover}(\mathit{mother} \mathit{chromosomes}, \mathit{crossover\_strategy})$
+
+    \State $\mathit{father} \mathit{gamet} \gets
+    \mathit{Crossover}(\mathit{father} \mathit{chromosomes}, \mathit{crossover\_strategy})$
     \EndFunction
 
     \State
 
-    \Function{Crossover}{chromosomeA, chromosomeB}
-    \State $\mathit{crossovers} \gets $ точки кроссинговера
+    \Function{Crossover}{chromosomeA, chromosomeB, crossover\_strategy}
+    \State $\mathit{crossovers} \gets $ точки кроссинговера в
+    соответсвии с $\mathit{crossover\_strategy}$
     \State $\mathit{gametA} \gets []$
     \State $\mathit{gametB} \gets []$
     \For{$\mathit{position}$ in $\mathit{chromosome}$}
