@@ -616,6 +616,9 @@ Drosophila melanogaster
 ТАБЛИЧКА
 
 \subsection{Обобщённые данные}
+
+\begin{table}[h]
+  \centering
 % BEGIN RECEIVE ORGTBL datasets
 \begin{tabular}{rlll}
 \hline
@@ -627,6 +630,10 @@ Drosophila melanogaster
 \hline
 \end{tabular}
 % END RECEIVE ORGTBL datasets
+  \caption{Входные даные}
+  \label{tab:data}
+\end{table}
+
 \iffalse
 #+ORGTBL: SEND datasets orgtbl-to-latex :splice nil :skip 0
 |-----------------------+---------+---------+---------|
@@ -638,6 +645,7 @@ Drosophila melanogaster
 |-----------------------+---------+---------+---------|
 
 \fi
+
 Другие данные:
 \begin{description}
 \item[nocross] 200 кошек 30 маркеров без кросинговеров
@@ -646,18 +654,24 @@ Drosophila melanogaster
 \item[cats] 192 кошки блеать
 \end{description}
 
-% BEGIN RECEIVE ORGTBL perf
-\begin{tabular}{lrrr}
-\hline
- & сыс & expO & expm \\
-\hline
-nocross & 0 & 0 & 0 \\
-singlecross & 0 & 0 & 0 \\
-manycross & 10 & 2 & 3 \\
-cats & 1 & 0 & 0 \\
-\hline
-\end{tabular}
-% END RECEIVE ORGTBL perf
+\begin{table}[h]
+  \centering
+  % BEGIN RECEIVE ORGTBL perf
+  \begin{tabular}{lrrr}
+    \hline
+    & сыс & expO & expm \\
+    \hline
+    nocross & 0 & 0 & 0 \\
+    singlecross & 0 & 0 & 0 \\
+    manycross & 10 & 2 & 3 \\
+    cats & 1 & 0 & 0 \\
+    \hline
+  \end{tabular}
+  % END RECEIVE ORGTBL perf
+  \caption{Количество ошибок}
+  \label{tab:perf}
+\end{table}
+
 
 \iffalse
 #+ORGTBL: SEND perf orgtbl-to-latex :splice nil :skip 0
@@ -671,23 +685,30 @@ cats & 1 & 0 & 0 \\
 |-------------+-----+------+------|
 \fi
 
-% BEGIN RECEIVE ORGTBL qual
-\begin{tabular}{llll}
-\hline
- & сыс & expO & expm \\
-\hline
-o200m30 & 1c & 10m & 1h \\
-o200m40 & 1c & 10m & 2d \\
-o200m50 & 2c & 10m & $\infty$ \\
-o300m30 & 2c & 1d & 2h \\
-o300m40 & 3c & 1d & 2d \\
-o300m50 & 3c & 1d & $\infty$ \\
-o400m30 & 5c & $\infty$ & 3h \\
-o400m40 & 6c & $\infty$ & 3d \\
-o400m50 & 8c & $\infty$ & $\infty$ \\
-\hline
-\end{tabular}
-% END RECEIVE ORGTBL qual
+\begin{table}[h]
+  \centering
+  % BEGIN RECEIVE ORGTBL qual
+  \begin{tabular}{llll}
+    \hline
+    & сыс & expO & expm \\
+    \hline
+    o200m30 & 1c & 10m & 1h \\
+    o200m40 & 1c & 10m & 2d \\
+    o200m50 & 2c & 10m & $\infty$ \\
+    o300m30 & 2c & 1d & 2h \\
+    o300m40 & 3c & 1d & 2d \\
+    o300m50 & 3c & 1d & $\infty$ \\
+    o400m30 & 5c & $\infty$ & 3h \\
+    o400m40 & 6c & $\infty$ & 3d \\
+    o400m50 & 8c & $\infty$ & $\infty$ \\
+    \hline
+  \end{tabular}
+  % END RECEIVE ORGTBL qual
+
+  \caption{Скорость работы алгоритмов}
+  \label{tab:qual}
+\end{table}
+
 \iffalse
 #+ORGTBL: SEND qual orgtbl-to-latex :splice nil :skip 0
 |---------+-----+----------+----------|
