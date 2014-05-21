@@ -500,11 +500,11 @@ Drosophila melanogaster
     \For{$i \gets 0; i < M - 1; i++$}
     \For{$j \gets 0; i < M - 1; j++$}
 
-    \If{$recs[i, j] > recs[i, j + 1] and recs[i, j+1] = 0$}
+    \If{$recs[i, j] > recs[i, j + 1]$ and $recs[i, j+1] = 0$}
     \State $recs[i, j+1] \gets recs[i, j] +1$
     \State $recs[j+1, i] \gets recs[j, i] +1$
     \EndIf
-    \If{$recs[i, j] > recs[i, j + 1] and recs[i, j+1] = -1$}
+    \If{$recs[i, j] > recs[i, j + 1]$ and $recs[i, j+1] = -1$}
     \State $recs[i, j+1] \gets recs[i, j]$
     \State $recs[j+1, i] \gets recs[j, i]$
     \EndIf
@@ -573,6 +573,50 @@ Drosophila melanogaster
 Особь в нашем случае, это объект класса Organism
 
 // тут будет код и его описание в виде листинга
+
+\begin{algorithm}
+  \caption{Генерация родословной}
+  \label{algo:pedogen}
+  \begin{algorithmic}[1]
+    \Procedure{GenPedigree}{}
+    \State $\mathit{population} \gets []$
+    \State $\mathit{founders} \gets$ список прародителей
+    \State $\mathit{population} \gets \mathit{population} + \mathit{founders}$
+
+    \For{$gen \gets 0 ; gen < n\_gen ; gen++$}
+    \State $(\mathit{males}, \mathit{females}) \gets \mathit{divide}(\mathit{population})$
+    \State $\mathit{mother} \gets \mathit{choice}(\mathit{females})$
+    \State $\mathit{father} \gets \mathit{choice}(\mathit{males})$
+    \State $\mathit{child} \gets \mathit{CrossBreed}(\mathit{mother}, \mathit{father})$
+    \State добавить $\mathit{child}$ к $\mathit{population}$
+    \EndFor
+    \State \textbf{print} population
+    \EndProcedure
+
+    \State
+
+    \Function{CrossBreed}{mother, father}
+    \State $\mathit{mother} \mathit{gamet} \gets \mathit{Crossover}(\mathit{mother} \mathit{chromosomes})$
+    \State $\mathit{father} \mathit{gamet} \gets \mathit{Crossover}(\mathit{father} \mathit{chromosomes})$
+    \EndFunction
+
+    \State
+
+    \Function{Crossover}{chromosomeA, chromosomeB}
+    \State $\mathit{crossovers} \gets $ точки кроссинговера
+    \State $\mathit{gametA} \gets []$
+    \State $\mathit{gametB} \gets []$
+    \For{$\mathit{position}$ in $\mathit{chromosome}$}
+    \If{$\mathit{position}$ in $\mathit{crossovers}$}
+    \State \textbf{swap} $\mathit{chromosomeA}$, $\mathit{chromosomeB}$
+    \State $\mathit{gametA} \gets \mathit{gametA} + \mathit{chromosomeA}[\mathit{position}]$
+    \State $\mathit{gametB} \gets \mathit{gametB} + \mathit{chromosomeB}[\mathit{position}]$
+    \EndIf
+    \EndFor
+    \State \Return $\mathit{random}(\mathit{gametA}, \mathit{gametB})$
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
 
 Алгоритм генерации родословной:
 \begin{enumerate}
