@@ -1,5 +1,7 @@
 \documentclass{matmex-diploma-custom}
 \usepackage{amsfonts}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \begin{document}
 \filltitle{ru}{
@@ -348,27 +350,32 @@ Drosophila melanogaster
 значениями частоты рекомбинаций между ними, поэтому начинаем строить
 карту от центра, представимого двумя самыми близкими маркерами. Более
 формально этот алгоритм можно записать следующим образом:
-\begin{enumerate}
-\item Положим $n := dim(distMatrix)$
-\item Выбираем из всех пар $(l,r)$ такую, что
-  $distMatrix[l][r]$ был минимальным элементом матрицы
-\item Положим массив $order := [l, r]$
-\item Убираем $r$ и $l$ из просматриваемых узлов
-\item Пока есть не рассмотренные узлы:
-  \begin{enumerate}
-  \item Положим $l = order[0]$
-  \item Положим $r = order[-1]$
-  \item Выбираем из оставшихся узлов такой узел $m$, который
-    ближе всех к $l$ или $r$
-  \item Убираем его из множества рассматриваемых узлов
-  \item Если $m$ ближе к $r$:
-    \begin{enumerate}
-    \item Присоединяем к $order$ $[m]$ справа
-    \item Присоединяем $[m]$ к $order$ слева
-    \end{enumerate}
-  \end{enumerate}
-  \item Возвращаем $order$
-\end{enumerate}
+\begin{algorithm}
+  \caption{Лианеризация маркеров}
+  \label{algo:linmark}
+  \begin{algorithmic}[1]
+    \Function{Linmark}{}
+
+    \State $n \gets dim(distMatrix)$
+    \State $(l, r) \gets \min_{x, y} distMatrix[x][y]$
+    \State $order \gets [l, r]$
+
+    \While{есть не рассмотренные узлы}
+    \State $l \gets first(order)$
+    \State $r \gets last(order)$
+    \State $m \gets $ ближайший к $l$ или $r$ узел.
+
+    \If{$m$ ближе к $r$}
+    \State $order \gets order + [m]$
+    \Else
+    \State $order \gets [m] + order$
+    \EndIf
+    \EndWhile
+    \State \Return order
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
 --- где входным параметром $distMatrix$ является квадратная матрица
 частот рекомбинаций.
 
@@ -474,48 +481,42 @@ Drosophila melanogaster
 изначальной версии, входные параметры которого аналогичны с
 рассмотренным в главе \textbf{1.3}:
 
-\begin{enumerate}
-\item[Этап 1:] Выполняем алгоритм \textbf{1.3} и его результаты
-  записываем массив $order[M]$
-\item[Этап 2:] Уточняем матрицу:
-  \begin{enumerate}
-  \item[Шаг 1:] Положим $common\_recs$ матрицу размера $M \times M$
-    заполненную нулями. Эта матрица будет агрегировать данные о
-    рекомбинациях, получаемых из рассмотрения каждой особи.
-  \item[Шаг 2:] Для каждой особи $k$ из родословной:
-    \begin{enumerate}
-    \item[Шаг 2.1:] Положим $recs$ матрицу размера $M \times M$ заполненную
-      нулями.
-    \item[Шаг 2.2:] Для каждой пары локусов определить, была ли между ними
-      рекомбинация и положить значение в матрицу $recs$.
+\begin{algorithm}
+  \caption{Построение генетических карт с учётом кратности кроссинговера}
+  \label{newalgo}
+  \begin{algorithmic}[1]
+    \Function{Genmap2}{}
+    \State $order \gets gen\_map(pedegree)$
+    \State $agg \gets 0_{M, M}$
+    \For{$k$ in $pedegree$}
+    \State $recs \gets 0_{M, M}$
+    \For{$i \gets 0; i < M; i++$}
+    \For{$j \gets i; j < M; j++$}
+      \State $recs[i, j] \gets getRecCount(k, i, j)$
+      \State $recs[j, i] \gets getRecCount(k, i, j)$
+    \EndFor
+    \EndFor
 
-      Заметим, что после этого этапа, $recs$ превратится в матрицу из
-      нулей и единиц. Используя наше замечание о не убывании
-      количества рекомбинаций в зависимости от расстояния, получаем
-      шаг \textbf{2.3}:
+    \For{$i \gets 0; i < M - 1; i++$}
+    \For{$j \gets 0; i < M - 1; j++$}
 
-    \item[Шаг 2.3:] для каждого $i := 0; i < M-1; inc(i)$:
-      \begin{enumerate}
-      \item[Шаг 2.3.1:] для каждого $j := i; j < M-1; inc(j)$:
-        \begin{enumerate}
-        \item Если $recs[i][j] <= recs[i][j+1]$:
-          \begin{enumerate}
-          \item[Тогда:] $skip$
-          \item[Иначе:] Если мы знаем точно, что между $i$ и $j+1$ не
-            было рекомбинации, то $inc(resc[i][j+1])$, иначе
-            $recs[i][j+1] = recs[i][j]$
-          \end{enumerate}
-        \end{enumerate}
-      \item[Шаг 2.3.2:] Добавляем $recs$ к $common\_recs$
-      \end{enumerate}
-    \end{enumerate}
-  \item[Шаг 3:] По матрице $common\_recs$ строим порядок с помощью
-    рассмотренных в \textbf{3.1.1} алгоритмов.
-\end{enumerate}
-\end{enumerate}
+    \If{$recs[i, j] > recs[i, j + 1] and recs[i, j+1] = 0$}
+    \State $recs[i, j+1] \gets recs[i, j] +1$
+    \State $recs[j+1, i] \gets recs[j, i] +1$
+    \EndIf
+    \If{$recs[i, j] > recs[i, j + 1] and recs[i, j+1] = -1$}
+    \State $recs[i, j+1] \gets recs[i, j]$
+    \State $recs[j+1, i] \gets recs[j, i]$
+    \EndIf
 
-\end{enumerate}
-\end{enumerate}
+    \EndFor
+    \EndFor
+    \State $agg \gets agg + recs$
+    \EndFor
+    \State \Return Linmark(agg)
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
 
 
 Новый алгоритм алгоритм реализует описанную выше схему. В этой главе мы
