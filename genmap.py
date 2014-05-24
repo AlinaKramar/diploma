@@ -98,92 +98,67 @@ class Pedigree(object):
 
             store_gamets(s, g1, g2)
 
-    def get_cistrans_matrix(self, stat=True):
+    def get_cistrans_matrix(self, stat=True, order_hint=None):
         # init the CIS - TRANS estimation matrix
-        cistrans = []
-        for i in range(self.M):
-            row = [[0, 0] for _ in range(self.M)]
-            cistrans.append(row)
+        def zero_cistrans():
+            return [[None] * self.M for _ in range(self.M)]
 
-        # cycle through the species
-        for s in self.organisms:
-            if not s.children:              # no children - no meioses
-                continue
+        def add_cistrans(a, b):
+            def f(x):
+                return (0, 0) if x is None else x
+            return [[(ra + rb, nra + nrb)
+                     for ((ra, nra), (rb, nrb)) in zip(map(f, ra), map(f, rb))]
+                    for (ra, rb) in zip(a, b)]
 
-            # cycle through all locus combinations
-            for i in range(self.M):
-                if s.is_homozigota_at(i):
-                    continue
-                for j in range(i + 1, self.M):
-                    if s.is_homozigota_at(j):
+        def organism_cistrans(o):
+            het_loci = [i for i in range(self.M) if not o.is_homozigota_at(i)]
+            ret = zero_cistrans()
+            for (i, j) in itertools.product(het_loci, repeat=2):
+                type1 = type2 = rec = nonrec = 0
+                for ch in o.children:
+                    gamete = {ch.gamets1[self.M]: ch.gamets1,
+                              ch.gamets2[self.M]: ch.gamets2}[o.id]
+                    if gamete[i] == 0 or gamete[j] == 0:    # the meiosis was uninformative on these loci
                         continue
 
-                    type1 = type2 = rec = nonrec = 0
+                    if gamete[i] == gamete[j]:
+                        type1 += 1                # AB or ab
+                    else:
+                        type2 += 1                # Ab or aB
 
-                    # recycle through the children
-                    for ch in s.children:
-                        gamete = None
-                        if ch.gamets1[self.M] == s.id:    # find our gamete in the child
-                            gamete = ch.gamets1
-                        if ch.gamets2[self.M] == s.id:
-                            gamete = ch.gamets2
-                        assert gamete is not None, "cant determine which of gametes is ours. 31.05.13 Sysoev: now this should not happen!"
+                    # gather the reliable info
+                    if (gamete[i], gamete[j]) in [(o.gamets1[i], o.gamets2[j]),
+                                                  (o.gamets2[i], o.gamets1[j])]:
+                        rec += 1                # RECOMBINATION
+                    else:
+                        nonrec += 1             # NO RECOMBINATION
 
-                        if gamete[i] == 0 or gamete[j] == 0:    # the meiosis was uninformative on these loci
-                            continue
+                if stat and len(o.children) > 4:
+                    if rec < min(type1, type2):
+                        # print rec, nonrec, type1, type2
+                        nonrec = max(type1, type2)
+                        rec = min(type1, type2)
 
-                        # gather the statistical info
-                        if gamete[i] == gamete[j]:
-                            type1 += 1                # AB or ab
-                        else:
-                            type2 += 1                # Ab or aB
+                ret[i][j] = (rec, nonrec)
+            if order_hint:
+                for i, left in enumerate(order_hint):
+                    for j, right in enumerate(order_hint[i+1:], i+1):
+                        prev = order_hint[j-1]
+                        if ret[left][right] is None:
+                            ret[left][right] = ret[right][left] = ret[left][prev]
 
-                        # gather the reliable info
-                        if (gamete[i], gamete[j]) in [(s.gamets1[i], s.gamets2[j]),
-                                                      (s.gamets2[i], s.gamets1[j])] :
-                            rec += 1                # RECOMBINATION
-                        else:
-                            nonrec += 1             # NO RECOMBINATION
+            return ret
 
-                    if stat and len(s.children) > 4:
-                        if rec < min(type1, type2):
-                            # print rec, nonrec, type1, type2
-                            nonrec = max(type1, type2)
-                            rec = min(type1, type2)
-
-                    cistrans[i][j][0] += rec
-                    cistrans[i][j][1] += nonrec
-
-        return cistrans
+        cistranses = (organism_cistrans(o) for o in self.organisms if o.children)
+        return reduce(add_cistrans, cistranses)
 
     #
     #   Given the recombinations, calculate the fractions
     #
-    def get_pairwise_recombination_distance_matrix(self):
-        matrix = self.get_cistrans_matrix()
-        # first of all, calculate the fractions
-        fracs = []
-        for i in range(self.M):
-            row = []
-            for j in range(self.M):
-                if j == i:
-                    recombinants = 0
-                    nonrecombinants = 1
-                else:
-                    if j < i:                # initial matrix is triangle (see how we form it). Fracs matrix should be full
-                        recombinants = matrix[j][i][0]
-                        nonrecombinants = matrix[j][i][1]
-                    else:
-                        recombinants = matrix[i][j][0]
-                        nonrecombinants = matrix[i][j][1]
-
-                total = recombinants + nonrecombinants
-                if total:
-                    row.append(float(recombinants) / total)
-                else:
-                    row.append(2)   # no data for these loci.
-                    print 'this happened! no data for loci ', i, j
-            fracs.append(row)
+    def get_pairwise_recombination_distance_matrix(self, order_hint=None):
+        matrix = self.get_cistrans_matrix(order_hint=order_hint)
+        fracs = [[1.0 * rec / (rec + nonrec) for (rec, nonrec) in row]
+                 for row in matrix]
         return fracs
 
 def not_empty_lines(f):
@@ -330,16 +305,12 @@ def process_pedigree(file_name, order=None, stat=True):
     order = order or []
     pedigree = open_file(file_name)
     fracs = pedigree.get_pairwise_recombination_distance_matrix()
-
-    # get the cluster
-    if order:
-        cluster = order
-    else:
+    for i in range(5):
         cluster = form_cluster(pedigree.M, fracs)
-
-    for l in range(pedigree.M):
-        if l not in cluster:
-            cluster = insert_locus(cluster, l, fracs)
+        for l in range(pedigree.M):
+            if l not in cluster:
+                cluster = insert_locus(cluster, l, fracs)
+        fracs = pedigree.get_pairwise_recombination_distance_matrix(order_hint=cluster)
 
 
     for i in range(len(cluster)):
