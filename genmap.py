@@ -8,6 +8,11 @@ import sys
 import itertools
 import collections
 
+def perr(*args):
+    for x in args:
+        print >>sys.stderr, x,
+    print >>sys.stderr
+
 OrganismRecord = collections.namedtuple("OrganismRecord",
     ["id", "parent1", "parent2", "sex", "allels"])
 
@@ -51,14 +56,11 @@ class Pedigree(object):
         # cycle through all species
         for s in self.organisms:
             # init gametes for the specie
-            g1 = range(self.M + 1)
-            g2 = range(self.M + 1)
+            g1 = [0] * (self.M + 1)
+            g2 = [0] * (self.M + 1)
             for i in range(self.M):
                 if s.is_homozigota_at(i):
                     g1[i] = g2[i] = s.allels[2 * i]
-                else:
-                    g1[i] = g2[i] = 0
-                g1[self.M] = g2[self.M] = 0                       # we don't know the parent for the gamete yet
 
             if not s.parents:
                 store_gamets(s, g1, g2)
@@ -96,7 +98,7 @@ class Pedigree(object):
 
             store_gamets(s, g1, g2)
 
-    def process_gametes(self, stat=True):
+    def get_cistrans_matrix(self, stat=True):
         # init the CIS - TRANS estimation matrix
         cistrans = []
         for i in range(self.M):
@@ -137,8 +139,8 @@ class Pedigree(object):
                             type2 += 1                # Ab or aB
 
                         # gather the reliable info
-                        if ((gamete[i] == s.gamets1[i] and gamete[j] == s.gamets2[j]) or
-                                (gamete[i] == s.gamets2[i] and gamete[j] == s.gamets1[j])):
+                        if (gamete[i], gamete[j]) in [(s.gamets1[i], s.gamets2[j]),
+                                                      (s.gamets2[i], s.gamets1[j])] :
                             rec += 1                # RECOMBINATION
                         else:
                             nonrec += 1             # NO RECOMBINATION
@@ -153,6 +155,36 @@ class Pedigree(object):
                     cistrans[i][j][1] += nonrec
 
         return cistrans
+
+    #
+    #   Given the recombinations, calculate the fractions
+    #
+    def get_pairwise_recombination_distance_matrix(self):
+        matrix = self.get_cistrans_matrix()
+        # first of all, calculate the fractions
+        fracs = []
+        for i in range(self.M):
+            row = []
+            for j in range(self.M):
+                if j == i:
+                    recombinants = 0
+                    nonrecombinants = 1
+                else:
+                    if j < i:                # initial matrix is triangle (see how we form it). Fracs matrix should be full
+                        recombinants = matrix[j][i][0]
+                        nonrecombinants = matrix[j][i][1]
+                    else:
+                        recombinants = matrix[i][j][0]
+                        nonrecombinants = matrix[i][j][1]
+
+                total = recombinants + nonrecombinants
+                if total:
+                    row.append(float(recombinants) / total)
+                else:
+                    row.append(2)   # no data for these loci.
+                    print 'this happened! no data for loci ', i, j
+            fracs.append(row)
+        return fracs
 
 def not_empty_lines(f):
     return itertools.ifilter(lambda x: x,
@@ -285,35 +317,6 @@ def insert_locus(cluster, locus, matrix):
     return cluster
 
 #
-#   Given the recombinations, calculate the fractions
-#
-def process_matrix(M, matrix, number):
-    # first of all, calculate the fractions
-    fracs = []
-    for i in range(M):
-        row = []
-        for j in range(M):
-            if j == i:
-                recombinants = 0
-                nonrecombinants = 1
-            else:
-                if j < i + 1:                # initial matrix is triangle (see how we form it). Fracs matrix should be full
-                    recombinants = matrix[j][i][0]
-                    nonrecombinants = matrix[j][i][1]
-                else:
-                    recombinants = matrix[i][j][0]
-                    nonrecombinants = matrix[i][j][1]
-
-            if recombinants or nonrecombinants:
-                row.append(float(recombinants) / (recombinants + nonrecombinants))
-            else:
-                row.append(2)   # no data for these loci.
-                print 'this happened! no data for loci ', i, j
-        fracs.append(row)
-
-    return fracs
-
-#
 #    process the pedigree. Main function in the module
 #         file_name - name of the CHR file with the pedigree data
 #         order - order of loci that already known
@@ -326,8 +329,7 @@ def process_matrix(M, matrix, number):
 def process_pedigree(file_name, order=None, stat=True):
     order = order or []
     pedigree = open_file(file_name)
-    rec = pedigree.process_gametes(stat)
-    fracs = process_matrix(pedigree.M, rec, pedigree.number_of_species)
+    fracs = pedigree.get_pairwise_recombination_distance_matrix()
 
     # get the cluster
     if order:
@@ -351,7 +353,7 @@ def process_pedigree(file_name, order=None, stat=True):
 
 
 # NAME = 'c:\\python27\\Lib\\chr1000.gen'
-NAME = 'out2.gen'
+NAME = 'ord.gen'
 if len(sys.argv) > 1:
     NAME = sys.argv[1]
 
