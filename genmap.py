@@ -95,7 +95,9 @@ class Pedigree(object):
                 g1[self.M] = s.parents[0].id
             if g2[self.M] == 0 and len(s.parents) == 2:
                 g2[self.M] = s.parents[1].id
-
+            # print g1
+            # print g2
+            # print
             store_gamets(s, g1, g2)
 
     def get_cistrans_matrix(self, stat=True, order_hint=None):
@@ -124,7 +126,7 @@ class Pedigree(object):
                     if gamete[i] == gamete[j]:
                         type1 += 1                # AB or ab
                     else:
-                        type2 += 1                # Ab or aB
+                        type2 += 1                # Ab or AB
 
                     # gather the reliable info
                     if (gamete[i], gamete[j]) in [(o.gamets1[i], o.gamets2[j]),
@@ -157,7 +159,9 @@ class Pedigree(object):
     #
     def get_pairwise_recombination_distance_matrix(self, order_hint=None):
         matrix = self.get_cistrans_matrix(order_hint=order_hint)
-        fracs = [[1.0 * rec / (rec + nonrec) for (rec, nonrec) in row]
+        # for row in matrix:
+        #     print(row)
+        fracs = [[1.0 * rec / max(1, rec + nonrec) for (rec, nonrec) in row]
                  for row in matrix]
         return fracs
 
@@ -167,8 +171,8 @@ def not_empty_lines(f):
 #
 #    Open and parse the .GEN file
 #
-def open_file(name):
-    with open(name) as f:
+def open_file(name=None):
+    with (open(name) if name else sys.stdin) as f:
         lines = not_empty_lines(f)
 
         next(lines)                 # number of FAMILIES - not used, assumed 1
@@ -301,7 +305,7 @@ def insert_locus(cluster, locus, matrix):
 #            process_pedigree("c:\\my_file.gen")
 #       process_pedigree("c:\\my_file.gen", range(10), False) # first 10 loci are in the right order, use only the reliable results
 #
-def process_pedigree(file_name, order=None, stat=True):
+def process_pedigree(file_name=None, order=None, stat=True):
     order = order or []
     pedigree = open_file(file_name)
     fracs = pedigree.get_pairwise_recombination_distance_matrix()
@@ -322,11 +326,4 @@ def process_pedigree(file_name, order=None, stat=True):
 
     return cluster, fracs
 
-
-# NAME = 'c:\\python27\\Lib\\chr1000.gen'
-NAME = 'chr1000.gen'
-if len(sys.argv) > 1:
-    NAME = sys.argv[1]
-
-
-process_pedigree(NAME)
+process_pedigree()
