@@ -305,7 +305,7 @@ def process_pedigree(file_name, order=None, stat=True):
     order = order or []
     pedigree = open_file(file_name)
     fracs = pedigree.get_pairwise_recombination_distance_matrix()
-    for i in range(5):
+    for i in range(1):
         cluster = form_cluster(pedigree.M, fracs)
         for l in range(pedigree.M):
             if l not in cluster:
@@ -324,7 +324,7 @@ def process_pedigree(file_name, order=None, stat=True):
 
 
 # NAME = 'c:\\python27\\Lib\\chr1000.gen'
-NAME = 'ord.gen'
+NAME = 'chr1000.gen'
 if len(sys.argv) > 1:
     NAME = sys.argv[1]
 
