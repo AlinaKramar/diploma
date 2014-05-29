@@ -865,27 +865,45 @@ $f(d):\mathbb{R} \to \mathbb{N}$, возвращающую количество 
 \end{itemize}
 
 Используя описанную главой выше схему, получает следующие данные о
-скорости, демонстрируемые в Таблице \ref{tab:perf}. Не трудно заметить
-выигрыш нашего алгоритма по сравнению с остальными.
+скорости, демонтрируемые в Таблице \ref{tab:perf}. Не трудно заметить
+заметный выйгрыш нашего алгоритма по сравнению с остальными.
+
+\iffalse
+#+ORGTBL: SEND perf orgtbl-to-latex :splice nil :skip 0
+|---------+-------+----------+----------|
+|         | сыс   | expO     | expm     |
+|---------+-------+----------+----------|
+| o200m30 | 0.3c  | 10m      | 1h       |
+| o200m40 | 0.3c  | 10m      | 2d       |
+| o200m50 | 0.3c  | 10m      | $\infty$ |
+| o300m30 | 0.4c  | 1d       | 2h       |
+| o300m40 | 0.45c | 1d       | 2d       |
+| o300m50 | 0.45c | 1d       | $\infty$ |
+| o400m30 | 0.6c  | $\infty$ | 3h       |
+| o400m40 | 0.6c  | $\infty$ | 3d       |
+| o400m50 | 1c    | $\infty$ | $\infty$ |
+|---------+-------+----------+----------|
+\fi
+
 \begin{table}[h]
   \centering
-  % BEGIN RECEIVE ORGTBL qual
-  \begin{tabular}{lccc}
-    \hline
-    & genmap.py & CRIMAP & FASTLINK \\
-    \hline
-    o200m30 & 1c & 10m & 1h \\
-    o200m40 & 1c & 10m & 2d \\
-    o200m50 & 2c & 10m & $\infty$ \\
-    o300m30 & 2c & 1d & 2h \\
-    o300m40 & 3c & 1d & 2d \\
-    o300m50 & 3c & 1d & $\infty$ \\
-    o400m30 & 5c & $\infty$ & 3h \\
-    o400m40 & 6c & $\infty$ & 3d \\
-    o400m50 & 8c & $\infty$ & $\infty$ \\
-    \hline
-  \end{tabular}
-  % END RECEIVE ORGTBL qual
+  % BEGIN RECEIVE ORGTBL perf
+\begin{tabular}{llll}
+\hline
+ & сыс & expO & expm \\
+\hline
+o200m30 & 0.3c & 10m & 1h \\
+o200m40 & 0.3c & 10m & 2d \\
+o200m50 & 0.3c & 10m & $\infty$ \\
+o300m30 & 0.4c & 1d & 2h \\
+o300m40 & 0.45c & 1d & 2d \\
+o300m50 & 3c & 1d & $\infty$ \\
+o400m30 & 5c & $\infty$ & 3h \\
+o400m40 & 6c & $\infty$ & 3d \\
+o400m50 & 8c & $\infty$ & $\infty$ \\
+\hline
+\end{tabular}
+  % END RECEIVE ORGTBL perf
 
   \caption{Скорость работы алгоритмов}
   \label{tab:perf}
@@ -900,18 +918,22 @@ $f(d):\mathbb{R} \to \mathbb{N}$, возвращающую количество 
 что предлагаемые в этой работе изменения действительно являются
 улучшениями.
 
-\iffalse #+ORGTBL: SEND qual orgtbl-to-latex :splice nil :skip 0
-|---------+-----+----------+----------| | | сыс | expO | expm |
-|---------+-----+----------+----------| | o200m30 | 1c | 10m | 1h | |
-o200m40 | 1c | 10m | 2d | | o200m50 | 2c | 10m | $\infty$ | | o300m30
-| 2c | 1d | 2h | | o300m40 | 3c | 1d | 2d | | o300m50 | 3c | 1d |
-$\infty$ | | o400m30 | 5c | $\infty$ | 3h | | o400m40 | 6c | $\infty$
-| 3d | | o400m50 | 8c | $\infty$ | $\infty$ |
-|---------+-----+----------+----------| \fi
+
+\iffalse
+#+ORGTBL: SEND qual1 orgtbl-to-latex :splice nil :skip 0
+|-------------+--------+--------+---------|
+|             | genmap | cromap | linkage |
+|-------------+--------+--------+---------|
+| nocross     |      0 |      0 |       0 |
+| singlecross |      0 |      0 |       0 |
+| manycross   |     10 |      2 |       3 |
+| cats        |      1 |      0 |       0 |
+|-------------+--------+--------+---------|
+\fi
 
 \begin{table}[h]
   \centering
-  % BEGIN RECEIVE ORGTBL perf
+  % BEGIN RECEIVE ORGTBL qual1
   \begin{tabular}{lccc}
     \hline
     & genmap & CRIMAP & FASTLINK \\
@@ -922,26 +944,26 @@ $\infty$ | | o400m30 | 5c | $\infty$ | 3h | | o400m40 | 6c | $\infty$
     cats & 1 & 0 & 0 \\
     \hline
   \end{tabular}
-  % END RECEIVE ORGTBL perf
+  % END RECEIVE ORGTBL qual1
   \caption{Количество ошибок}
   \label{tab:qual}
 \end{table}
 
 \iffalse
-#+ORGTBL: SEND perf orgtbl-to-latex :splice nil :skip 0
-|-------------+-----+------+------|
+#+ORGTBL: SEND qual2 orgtbl-to-latex :splice nil :skip 0
+|-------------+--------+--------+---------|
 |             | genmap | cromap | linkage |
-|-------------+-----+------+------|
-| nocross     |   0 |    0 |    0 |
-| singlecross |   0 |    0 |    0 |
-| manycross   |  10 |    2 |    3 |
-| cats        |   1 |    0 |    0 |
-|-------------+-----+------+------|
+|-------------+--------+--------+---------|
+| nocross     |      0 |      0 |       0 |
+| singlecross |      0 |      0 |       0 |
+| manycross   |     10 |      2 |       3 |
+| cats        |      1 |      0 |       0 |
+|-------------+--------+--------+---------|
 \fi
 
 \begin{table}[h]
   \centering
-  % BEGIN RECEIVE ORGTBL perf
+  % BEGIN RECEIVE ORGTBL qual2
   \begin{tabular}{lccc}
     \hline
     & old genmap & CRIMAP & FASTLINK \\
@@ -952,7 +974,7 @@ $\infty$ | | o400m30 | 5c | $\infty$ | 3h | | o400m40 | 6c | $\infty$
     cats & 1 & 0 & 0 \\
     \hline
   \end{tabular}
-  % END RECEIVE ORGTBL perf
+  % END RECEIVE ORGTBL qual2
   \caption{Количество ошибок в старой версии genmap}
   \label{tab:old}
 \end{table}
