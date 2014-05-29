@@ -94,6 +94,12 @@ def print_organisms(orgamisms):
 
 
 if __name__=="__main__":
-    organisms = generate(n_parents=3, n_generations=10, n_children=20,
-                         n_allels=30)
+    import sys
+    n_organisms, n_markers = [int(x) for x in sys.argv[1:]]
+    n_generations = 5
+    n_children = int(n_organisms / n_generations)
+    organisms = generate(
+        n_parents=3, n_generations=n_generations,
+        n_children=n_children, n_allels=n_markers)
+
     print_organisms(organisms)

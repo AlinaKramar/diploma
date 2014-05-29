@@ -129,8 +129,11 @@ class Pedigree(object):
                         type2 += 1                # Ab or AB
 
                     # gather the reliable info
-                    if (gamete[i], gamete[j]) in [(o.gamets1[i], o.gamets2[j]),
-                                                  (o.gamets2[i], o.gamets1[j])]:
+                    # if (gamete[i], gamete[j]) in [(o.gamets1[i], o.gamets2[j]),
+                    #                               (o.gamets2[i], o.gamets1[j])]:
+
+                    if ((gamete[i] == o.gamets1[i] and gamete[j] == o.gamets2[j]) or
+                        (gamete[i] == o.gamets2[i] and gamete[j] == o.gamets1[j])):
                         rec += 1                # RECOMBINATION
                     else:
                         nonrec += 1             # NO RECOMBINATION
@@ -172,23 +175,23 @@ def not_empty_lines(f):
 #    Open and parse the .GEN file
 #
 def open_file(name=None):
-    with (open(name) if name else sys.stdin) as f:
-        lines = not_empty_lines(f)
+    f = sys.stdin
+    lines = not_empty_lines(f)
 
-        next(lines)                 # number of FAMILIES - not used, assumed 1
-        M = int(next(lines))       # number of loci
-        locs_names = next(lines).split()  # names of loci
+    next(lines)                 # number of FAMILIES - not used, assumed 1
+    M = int(next(lines))       # number of loci
+    locs_names = next(lines).split()  # names of loci
 
-        next(lines)                 # read family number
-        number_of_species = int(next(lines))
+    next(lines)                 # read family number
+    number_of_species = int(next(lines))
 
-        records = []               # data array for the whole pedigree
-        for _ in range(number_of_species):                  # READ FAMILY
-            id, p1, p2, sex = map(int, next(lines).split())     # read species
-            allels = [int(a) for a in next(lines).split()]
-            records.append(OrganismRecord(id, p1, p2, sex, allels))
+    records = []               # data array for the whole pedigree
+    for _ in range(number_of_species):                  # READ FAMILY
+        id, p1, p2, sex = map(int, next(lines).split())     # read species
+        allels = [int(a) for a in next(lines).split()]
+        records.append(OrganismRecord(id, p1, p2, sex, allels))
 
-        return Pedigree(M, number_of_species, locs_names, records)
+    return Pedigree(M, number_of_species, locs_names, records)
 
 #
 #    Given the recombination fractions matrix, try to form the order
@@ -309,13 +312,7 @@ def process_pedigree(file_name=None, order=None, stat=True):
     order = order or []
     pedigree = open_file(file_name)
     fracs = pedigree.get_pairwise_recombination_distance_matrix()
-    for i in range(1):
-        cluster = form_cluster(pedigree.M, fracs)
-        for l in range(pedigree.M):
-            if l not in cluster:
-                cluster = insert_locus(cluster, l, fracs)
-        fracs = pedigree.get_pairwise_recombination_distance_matrix(order_hint=cluster)
-
+    cluster = form_cluster(pedigree.M, fracs)
 
     for i in range(len(cluster)):
         name = pedigree.locs_names[cluster[i]]
