@@ -1,12 +1,36 @@
-Traceback (most recent call last):
-  File "ogenmap.py", line 350, in <module>
-    process_pedigree(None, order=[], stat=False)
-  File "ogenmap.py", line 340, in process_pedigree
-    cluster = insert_locus(cluster, l, fracs)
-  File "ogenmap.py", line 279, in insert_locus
-    if matrix[locus][cluster[neighbor1 - 1]] < matrix[cluster[neighbor1]][cluster[neighbor1 - 1]]:
-TypeError: unsupported operand type(s) for -: 'NoneType' and 'int'
+this happened! no data for loci  0 4
+this happened! no data for loci  4 0
+L20     0.0
+L8     0.0
+L0     0.0
+L21     0.142857142857
+L11     0.0
+L10     0.0952380952381
+L1     0.0
+L5     0.0
+L7     0.0
+L12     0.0
+L15     0.0
+L18     0.0
+L23     0.0952380952381
+L29     0.0
+L2     0.0
+L4     0.0
+L6     0.285714285714
+L13     0.0
+L14     0.0416666666667
+L17     0.333333333333
+L22     0.352941176471
+L24     0.111111111111
+L26     0.0
+L27     0.0526315789474
+L28     0.133333333333
+L3     0.142857142857
+L9     0.0
+L16     0.0
+L19     0.0
+L25
 
-real	0m0.379s
-user	0m0.373s
+real	0m0.438s
+user	0m0.433s
 sys	0m0.003s
