@@ -1,126 +1,34 @@
-this happened! no data for loci  0 15
-this happened! no data for loci  0 17
-this happened! no data for loci  1 15
-this happened! no data for loci  1 17
-this happened! no data for loci  2 15
-this happened! no data for loci  2 17
-this happened! no data for loci  3 15
-this happened! no data for loci  3 17
-this happened! no data for loci  4 15
-this happened! no data for loci  4 17
-this happened! no data for loci  5 15
-this happened! no data for loci  5 17
-this happened! no data for loci  6 15
-this happened! no data for loci  6 17
-this happened! no data for loci  7 15
-this happened! no data for loci  7 17
-this happened! no data for loci  8 15
-this happened! no data for loci  8 17
-this happened! no data for loci  9 15
-this happened! no data for loci  9 17
-this happened! no data for loci  10 15
-this happened! no data for loci  10 17
-this happened! no data for loci  11 15
-this happened! no data for loci  11 17
-this happened! no data for loci  12 15
-this happened! no data for loci  12 17
-this happened! no data for loci  13 15
-this happened! no data for loci  13 17
-this happened! no data for loci  14 15
-this happened! no data for loci  14 17
-this happened! no data for loci  15 0
-this happened! no data for loci  15 1
-this happened! no data for loci  15 2
-this happened! no data for loci  15 3
-this happened! no data for loci  15 4
-this happened! no data for loci  15 5
-this happened! no data for loci  15 6
-this happened! no data for loci  15 7
-this happened! no data for loci  15 8
-this happened! no data for loci  15 9
-this happened! no data for loci  15 10
-this happened! no data for loci  15 11
-this happened! no data for loci  15 12
-this happened! no data for loci  15 13
-this happened! no data for loci  15 14
-this happened! no data for loci  15 16
-this happened! no data for loci  15 17
-this happened! no data for loci  15 18
-this happened! no data for loci  15 19
-this happened! no data for loci  15 20
-this happened! no data for loci  15 21
-this happened! no data for loci  15 22
-this happened! no data for loci  15 23
-this happened! no data for loci  15 24
-this happened! no data for loci  15 25
-this happened! no data for loci  15 26
-this happened! no data for loci  15 27
-this happened! no data for loci  15 28
-this happened! no data for loci  15 29
-this happened! no data for loci  16 15
-this happened! no data for loci  16 17
-this happened! no data for loci  17 0
-this happened! no data for loci  17 1
-this happened! no data for loci  17 2
-this happened! no data for loci  17 3
-this happened! no data for loci  17 4
-this happened! no data for loci  17 5
-this happened! no data for loci  17 6
-this happened! no data for loci  17 7
-this happened! no data for loci  17 8
-this happened! no data for loci  17 9
-this happened! no data for loci  17 10
-this happened! no data for loci  17 11
-this happened! no data for loci  17 12
-this happened! no data for loci  17 13
-this happened! no data for loci  17 14
-this happened! no data for loci  17 15
-this happened! no data for loci  17 16
-this happened! no data for loci  17 18
-this happened! no data for loci  17 19
-this happened! no data for loci  17 20
-this happened! no data for loci  17 21
-this happened! no data for loci  17 22
-this happened! no data for loci  17 23
-this happened! no data for loci  17 24
-this happened! no data for loci  17 25
-this happened! no data for loci  17 26
-this happened! no data for loci  17 27
-this happened! no data for loci  17 28
-this happened! no data for loci  17 29
-this happened! no data for loci  18 15
-this happened! no data for loci  18 17
-this happened! no data for loci  19 15
-this happened! no data for loci  19 17
-this happened! no data for loci  20 15
-this happened! no data for loci  20 17
-this happened! no data for loci  21 15
-this happened! no data for loci  21 17
-this happened! no data for loci  22 15
-this happened! no data for loci  22 17
-this happened! no data for loci  23 15
-this happened! no data for loci  23 17
-this happened! no data for loci  24 15
-this happened! no data for loci  24 17
-this happened! no data for loci  25 15
-this happened! no data for loci  25 17
-this happened! no data for loci  26 15
-this happened! no data for loci  26 17
-this happened! no data for loci  27 15
-this happened! no data for loci  27 17
-this happened! no data for loci  28 15
-this happened! no data for loci  28 17
-this happened! no data for loci  29 15
-this happened! no data for loci  29 17
-Traceback (most recent call last):
-  File "ogenmap.py", line 350, in <module>
-    process_pedigree(None, order=[], stat=False)
-  File "ogenmap.py", line 340, in process_pedigree
-    cluster = insert_locus(cluster, l, fracs)
-  File "ogenmap.py", line 279, in insert_locus
-    if matrix[locus][cluster[neighbor1 - 1]] < matrix[cluster[neighbor1]][cluster[neighbor1 - 1]]:
-TypeError: unsupported operand type(s) for -: 'NoneType' and 'int'
+L0     0.0
+L1     0.0
+L2     0.0
+L3     0.0
+L4     0.0
+L28     0.0
+L29     0.0263157894737
+L5     0.0
+L6     0.0
+L8     0.0
+L9     0.0
+L27     0.0
+L10     0.0
+L12     0.0
+L13     0.0
+L14     0.0
+L15     0.0
+L16     0.0
+L17     0.0
+L18     0.0
+L19     0.0
+L22     0.0
+L23     0.0
+L24     0.037037037037
+L25     0.05
+L26     0.0
+L7     0.0666666666667
+L11     0.0217391304348
+L20     0.0
+L21
 
-real	0m0.471s
-user	0m0.460s
-sys	0m0.007s
+real	0m0.474s
+user	0m0.473s
+sys	0m0.000s

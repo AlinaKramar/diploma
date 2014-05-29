@@ -302,11 +302,8 @@ def process_matrix(M, matrix, number):
                     recombinants = matrix[i][j][0]
                     nonrecombinants = matrix[i][j][1]
 
-            if recombinants != 0 or nonrecombinants != 0:
-                row.append(float(recombinants) / (recombinants + nonrecombinants))
-            else:
-                row.append(2)   # no data for these loci.
-                print 'this happened! no data for loci ', i, j
+            row.append(float(recombinants) / max(1, recombinants + nonrecombinants))
+
         fracs.append(row)
 
     return fracs
