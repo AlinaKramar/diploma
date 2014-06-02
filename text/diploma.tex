@@ -382,7 +382,7 @@ FASTLINK \cite{faslinkUrl}, так как это самая последняя �
 Поскольку существующие алгоритмы имеют большую вычислительную
 сложность или не способны давать правильный ответ в наиболее частых случаях,
 было решено написать новый алгоритм, позволяющий строить генетические
-карты быстрее и качественнее, чем у существующих. Так как в случае с
+карты быстрее и качественнее, чем существующие. Так как в случае с
 экспоненциальным ростом (алгоритм Элстона-Стюарта и алгоритм
 Ландера-Грина) помочь могут только локальные оптимизации
 \cite{o2001rapid, fishelson2002exact, fishelson2004optimizing}, не влияющие на
@@ -868,19 +868,19 @@ $f(d):\mathbb{R} \to \mathbb{N}$, возвращающую количество 
 
 \iffalse
 #+ORGTBL: SEND perf orgtbl-to-latex :splice nil :skip 0
-|---------+-------+----------+----------|
-|         | сыс   | expO     | expm     |
-|---------+-------+----------+----------|
-| o200m30 | 0.3c  | 10m      | 1h       |
-| o200m40 | 0.3c  | 10m      | 2d       |
-| o200m50 | 0.3c  | 10m      | $\infty$ |
-| o300m30 | 0.4c  | 1d       | 2h       |
-| o300m40 | 0.45c | 1d       | 2d       |
-| o300m50 | 0.45c | 1d       | $\infty$ |
-| o400m30 | 0.6c  | $\infty$ | 3h       |
-| o400m40 | 0.6c  | $\infty$ | 3d       |
-| o400m50 | 1c    | $\infty$ | $\infty$ |
-|---------+-------+----------+----------|
+|---------+---------+----------+----------|
+|         | Genmap2 | FASTLNK  | CRIMAP   |
+|---------+---------+----------+----------|
+| o200m30 | 0.3c    | 10m      | 1h       |
+| o200m40 | 0.3c    | 10m      | 2d       |
+| o200m50 | 0.3c    | 10m      | $\infty$ |
+| o300m30 | 0.4c    | 1d       | 2h       |
+| o300m40 | 0.45c   | 1d       | 2d       |
+| o300m50 | 0.45c   | 1d       | $\infty$ |
+| o400m30 | 0.6c    | $\infty$ | 3h       |
+| o400m40 | 0.6c    | $\infty$ | 3d       |
+| o400m50 | 1c      | $\infty$ | $\infty$ |
+|---------+---------+----------+----------|
 \fi
 
 \begin{table}[h]
@@ -888,17 +888,17 @@ $f(d):\mathbb{R} \to \mathbb{N}$, возвращающую количество 
   % BEGIN RECEIVE ORGTBL perf
 \begin{tabular}{llll}
 \hline
- & сыс & expO & expm \\
+ & Genmap2 & FASTLNK & CRIMAP \\
 \hline
 o200m30 & 0.3c & 10m & 1h \\
 o200m40 & 0.3c & 10m & 2d \\
 o200m50 & 0.3c & 10m & $\infty$ \\
 o300m30 & 0.4c & 1d & 2h \\
 o300m40 & 0.45c & 1d & 2d \\
-o300m50 & 3c & 1d & $\infty$ \\
-o400m30 & 5c & $\infty$ & 3h \\
-o400m40 & 6c & $\infty$ & 3d \\
-o400m50 & 8c & $\infty$ & $\infty$ \\
+o300m50 & 0.45c & 1d & $\infty$ \\
+o400m30 & 0.6c & $\infty$ & 3h \\
+o400m40 & 0.6c & $\infty$ & 3d \\
+o400m50 & 1c & $\infty$ & $\infty$ \\
 \hline
 \end{tabular}
   % END RECEIVE ORGTBL perf
@@ -919,29 +919,29 @@ o400m50 & 8c & $\infty$ & $\infty$ \\
 
 \iffalse
 #+ORGTBL: SEND qual1 orgtbl-to-latex :splice nil :skip 0
-|-------------+--------+--------+---------|
-|             | genmap | cromap | linkage |
-|-------------+--------+--------+---------|
-| nocross     |      0 |      0 |       0 |
-| singlecross |      0 |      0 |       0 |
-| manycross   |     10 |      2 |       3 |
-| cats        |      1 |      0 |       0 |
-|-------------+--------+--------+---------|
+|-------------+---------+--------+----------|
+|             | Genmap2 | CRIMAP | FASTLINK |
+|-------------+---------+--------+----------|
+| nocross     |       0 |      0 |        0 |
+| singlecross |       0 |      0 |        0 |
+| manycross   |      10 |      2 |        3 |
+| cats        |       1 |      0 |        0 |
+|-------------+---------+--------+----------|
 \fi
 
 \begin{table}[h]
   \centering
   % BEGIN RECEIVE ORGTBL qual1
-  \begin{tabular}{lccc}
-    \hline
-    & genmap & CRIMAP & FASTLINK \\
-    \hline
-    nocross & 0 & 0 & 0 \\
-    singlecross & 0 & 0 & 0 \\
-    manycross & 4 & 2 & 3 \\
-    cats & 1 & 0 & 0 \\
-    \hline
-  \end{tabular}
+\begin{tabular}{lrrr}
+  \hline
+  & Genmap2 & CRIMAP & FASTLINK \\
+  \hline
+  nocross & 0 & 0 & 0 \\
+  singlecross & 0 & 0 & 0 \\
+  manycross & 10 & 2 & 3 \\
+  cats & 1 & 0 & 0 \\
+  \hline
+\end{tabular}
   % END RECEIVE ORGTBL qual1
   \caption{Количество ошибок}
   \label{tab:qual}
@@ -949,29 +949,29 @@ o400m50 & 8c & $\infty$ & $\infty$ \\
 
 \iffalse
 #+ORGTBL: SEND qual2 orgtbl-to-latex :splice nil :skip 0
-|-------------+--------+--------+---------|
-|             | genmap | cromap | linkage |
-|-------------+--------+--------+---------|
-| nocross     |      0 |      0 |       0 |
-| singlecross |      0 |      0 |       0 |
-| manycross   |     10 |      2 |       3 |
-| cats        |      1 |      0 |       0 |
-|-------------+--------+--------+---------|
+|-------------+--------+--------+----------|
+|             | Genmap | CRIMAP | FASTLINK |
+|-------------+--------+--------+----------|
+| nocross     |      0 |      0 |        0 |
+| singlecross |      0 |      0 |        0 |
+| manycross   |     12 |      2 |        3 |
+| cats        |      1 |      0 |        0 |
+|-------------+--------+--------+----------|
 \fi
 
 \begin{table}[h]
   \centering
   % BEGIN RECEIVE ORGTBL qual2
-  \begin{tabular}{lccc}
-    \hline
-    & old genmap & CRIMAP & FASTLINK \\
-    \hline
-    nocross & 0 & 0 & 0 \\
-    singlecross & 1 & 0 & 0 \\
-    manycross & 14 & 2 & 3 \\
-    cats & 1 & 0 & 0 \\
-    \hline
-  \end{tabular}
+\begin{tabular}{lrrr}
+  \hline
+  & Genmap & CRIMAP & FASTLINK \\
+  \hline
+  nocross & 0 & 0 & 0 \\
+  singlecross & 0 & 0 & 0 \\
+  manycross & 12 & 2 & 3 \\
+  cats & 1 & 0 & 0 \\
+  \hline
+\end{tabular}
   % END RECEIVE ORGTBL qual2
   \caption{Количество ошибок в старой версии genmap}
   \label{tab:old}
