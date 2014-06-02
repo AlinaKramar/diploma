@@ -44,6 +44,7 @@
 
 \begin{frame}
   \frametitle{Необходимые определения}
+
   \begin{columns}
     \column{.5\textwidth}
     \begin{itemize}
@@ -52,26 +53,18 @@
     \item кроссинговер
     \item \underline{генетическая карта}
     \end{itemize}
-  % \frametitle{Генетические карты}
-  % \begin{itemize}
-  % \item При получении генетического материала невозможно дать ответ
-  %   о расположении маркеров на хромосоме
-  % \item Кроссинговер вносит возмущение в этот порядок
-  % \item Порядок маркеров и формирование гамет происходит во время мейоза
-  % \end{itemize}
 
     \column{.5\textwidth}
-    Картинка
+    \begin{figure}
+      \includegraphics[width=0.4\textwidth]{cross.png}
+      \caption{Кроссинговер}
+    \end{figure}
+    \begin{figure}
+      \includegraphics[width=0.4\textwidth]{map.png}
+      \caption{Генетическая карта}
+    \end{figure}
 
-    \medskip
-
-    Картинка
-    % \begin{figure}
-    %   \includegraphics[width=\textwidth]{../res/quiz.png}
-    %   \caption{Пример упражнения (Code)}
-    % \end{figure}
   \end{columns}
-
 \end{frame}
 
 \begin{frame}
@@ -119,23 +112,21 @@
 
   Что улучшили:
   \begin{itemize}
-  \item бла
-  \item бла
-  \item бла
+  \item Работа с ``плохими'' данными.
+  \item Уточнение карты.
+  \item Учёт кратных кроссинговеров.
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Улучшение \genmap: учёт кратности кроссинговера}
-  бла-бла-бла
-\end{frame}
-
-\begin{frame}
   \frametitle{Генерация тестовых данных}
+  Ситетические vs. реальные данные.
+
+  Много параметров:
   \begin{itemize}
   \item Стратегия кроссинговера.
   \item Численные параметры родословной.
-  \item Симуляция ошибок секвенирования.
+  \item Ошибки секвенирования.
   \end{itemize}
 \end{frame}
 
@@ -164,10 +155,10 @@
     200/30 & 0.3 секунд & 10 минут & 1 час \\
     & & & \\
     \hline
-    200/50 & 0.3 секунды & 10 минут & $\backslash$infty \\
+    200/50 & 0.3 секунды & 10 минут & $ \infty $ \\
     & & & \\
     \hline
-    400/40 & 6 секунд & $\backslash$infty & 3 дня \\
+    400/40 & 6 секунд & $ \infty $ & 3 дня \\
     & & & \\
     \hline
   \end{tabular}
@@ -175,8 +166,8 @@
 
 \begin{frame}
   \frametitle{Результаты}
-  Реализован более хороший алгоритм на основе \genmap. Проведена
-  верификация его.
+  Реализован более хороший алгоритм на основе \genmap. Проведена его
+  верификация.
   \begin{itemize}
   \item Использованы естественные и синтетические данные.
   \item Экспериментально показаны его сильные стороны.
