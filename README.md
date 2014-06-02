@@ -1,1 +1,1 @@
-Code and tests for diploma
+Code and tests for Alina diploma.
