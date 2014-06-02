@@ -1,5 +1,7 @@
 (TeX-add-style-hook "presentation"
  (lambda ()
+    (TeX-add-symbols
+     "genmap")
     (TeX-run-style-hooks
      "booktabs"
      "listings"
